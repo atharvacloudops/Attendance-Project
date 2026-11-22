@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Environment files
+.env
+backend/.env
+frontend/.env
+
+# Build output
+frontend/build/
+backend/dist/
+
+# Face model files (large binary weights — download via script)
+frontend/public/models/*.shard*
+
+# Uploaded face images
+backend/uploads/
+
+# Exported CSV files (keep folder, ignore generated files)
+backend/exports/*.csv
+!backend/exports/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# CSV export files (large — keep folder, ignore contents)
+backend/attendance_records/**/*.csv
+backend/exports/
