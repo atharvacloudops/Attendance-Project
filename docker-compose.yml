@@ -1,0 +1,45 @@
+# Runs the whole AttendEase stack: MongoDB + backend API + frontend (Nginx)
+#   docker compose up --build
+# Then open http://localhost
+
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/attendance_system
+      JWT_SECRET: ${JWT_SECRET:-change_this_secret_before_real_use}
+      JWT_EXPIRE: 7d
+      CLIENT_URL: ${CLIENT_URL:-http://localhost}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "5000:5000"
+    volumes:
+      - uploads_data:/app/uploads
+      - records_data:/app/attendance_records
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mongo_data:
+  uploads_data:
+  records_data:

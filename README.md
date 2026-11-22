@@ -354,6 +354,52 @@ cd frontend && npm run build
 
 ---
 
+## 🐳 Containerization & Deployment
+
+The project includes a complete Docker setup so the whole system runs with one command.
+
+| Item | Status |
+|------|--------|
+| Dockerfile (backend) | Included: `backend/Dockerfile` |
+| Dockerfile (frontend, Nginx) | Included: `frontend/Dockerfile`, `frontend/nginx.conf` |
+| Docker Compose (MongoDB + backend + frontend) | Included: `docker-compose.yml` |
+| CI pipeline (GitHub Actions) | Included: `.github/workflows/ci.yml` |
+| AWS EC2 deployment guide | Included: [`docs/AWS_DEPLOYMENT.md`](docs/AWS_DEPLOYMENT.md) |
+
+### Run with Docker
+
+```bash
+docker compose up --build
+```
+
+Open **http://localhost** (frontend) — the API is available at **http://localhost:5000/api**.
+
+Optional environment variables (create a `.env` file next to `docker-compose.yml`):
+
+```env
+JWT_SECRET=<long random string>
+GEMINI_API_KEY=<optional, for the AI chatbot>
+```
+
+To create the demo accounts inside the running container:
+
+```bash
+docker compose exec backend node utils/seed.js
+```
+
+### CI/CD
+
+On every push to `main`, GitHub Actions installs the backend, builds the frontend and builds the Docker images.
+
+### AWS Deployment
+
+Step-by-step instructions for deploying on an EC2 instance with Docker are in [`docs/AWS_DEPLOYMENT.md`](docs/AWS_DEPLOYMENT.md).
+
+### Additional modules
+
+Besides face-recognition attendance, the system includes a timetable manager, study-material upload (PDF), teacher absentee/defaulter reports and an AI chatbot powered by Google Gemini.
+
+
 ## 🛠️ Troubleshooting
 
 | Problem | Fix |
