@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install and check backend
+        working-directory: backend
+        run: |
+          npm ci
+          node --check server.js
+
+      - name: Install and build frontend
+        working-directory: frontend
+        env:
+          CI: false
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+
+      - name: Build Docker images
+        run: docker compose build
